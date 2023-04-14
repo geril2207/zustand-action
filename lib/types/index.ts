@@ -16,3 +16,5 @@ export type ExtractState<
   S,
   StoreWrapper extends StoreApi<S>
 > = StoreWrapper extends { getState: () => infer T } ? T : never;
+
+export * from './immer';
