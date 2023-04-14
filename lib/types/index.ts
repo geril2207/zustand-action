@@ -12,6 +12,7 @@ export type ActionFn<
   A extends any[] = any
 > = (utils: StoreUtils<S, StoreWrapper>) => (...args: A) => T;
 
-export type ExtractState<S> = StoreApi<S> extends { getState: () => infer T }
-  ? T
-  : never;
+export type ExtractState<
+  S,
+  StoreWrapper extends StoreApi<S>
+> = StoreWrapper extends { getState: () => infer T } ? T : never;

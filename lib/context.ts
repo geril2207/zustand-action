@@ -28,7 +28,9 @@ export const generateToolkit = <
     storeContext
   );
 
-  const useStoreSelector = generateSelector(useStoreContext);
+  const useStoreSelector = generateSelector<Store, StoreWrapper>(
+    useStoreContext
+  );
 
   const createAction = generateActionCreator<Store, StoreWrapper>();
 
