@@ -1,5 +1,8 @@
-import { createStore } from 'zustand';
-import { generateContext } from '../../lib/context/context';
+import { StoreApi, createStore } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import { generateToolkit } from '../../lib/context';
+import { WithImmer } from '../../lib/types/immer';
+
 export interface Todo {
   id: string;
   title: string;
@@ -8,7 +11,8 @@ export interface Todo {
 export interface Store {
   todos: Todo[];
 }
-const setupStore = () => createStore<Store>(() => ({ todos: [] }));
+const setupStore = () =>
+  createStore<Store>()(immer(() => ({ todos: [] as Todo[] })));
 
 export const {
   StoreContextProvider,
@@ -17,16 +21,21 @@ export const {
   useDispatch,
   useStoreContext,
   useStoreSelector,
-  // @ts-ignore
-} = generateContext<Store>(setupStore);
+} = generateToolkit<Store, WithImmer<StoreApi<Store>>>(setupStore);
 
 export const addTodo = createAction(({ set }, title: string) => {
   const todo: Todo = {
     title,
     id: crypto.randomUUID(),
   };
-
-  set((prev) => ({
-    todos: [...prev.todos, todo],
-  }));
+  set((draft) => {
+    draft.todos.push(todo);
+  });
 });
+
+const set = () => null;
+const get = (): Store => ({
+  todos: [],
+});
+
+const value = addTodo('s')({ set, get });

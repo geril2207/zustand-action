@@ -1,6 +1,6 @@
 import { useStore as useZustandStore } from 'zustand';
 import { StoreApi } from 'zustand';
-import { ExtractState } from '../types/index';
+import { ExtractState } from './types/index';
 
 export const generateSelector = <S extends any>(
   contextGetter: () => StoreApi<S>

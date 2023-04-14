@@ -1,18 +1,20 @@
-import { createStore } from 'zustand';
+import { StoreApi } from 'zustand';
 import {
   createContext as createReactContext,
   useContext as useReactContext,
 } from 'react';
-import { StoreApi } from 'zustand';
 import { createContextProvider } from './context.provider';
 import { generateSelector } from './selector';
-import { generateActionCreator } from '../action';
-import { generateDispatch } from '../dispatch';
+import { generateActionCreator } from './action';
+import { generateDispatch } from './dispatch';
 
-export const generateContext = <Store extends any>(
-  storeCreator: () => ReturnType<typeof createStore>
+export const generateToolkit = <
+  Store extends any,
+  StoreWrapper extends StoreApi<Store> = StoreApi<Store>
+>(
+  storeCreator: () => StoreWrapper
 ) => {
-  const storeContext = createReactContext<StoreApi<Store> | null>(null);
+  const storeContext = createReactContext<StoreWrapper | null>(null);
 
   const useStoreContext = () => {
     const storeInstance = useReactContext(storeContext);
@@ -21,14 +23,14 @@ export const generateContext = <Store extends any>(
     return storeInstance;
   };
 
-  const StoreContextProvider = createContextProvider(
+  const StoreContextProvider = createContextProvider<Store, StoreWrapper>(
     storeCreator,
     storeContext
   );
 
   const useStoreSelector = generateSelector(useStoreContext);
 
-  const createAction = generateActionCreator<Store>();
+  const createAction = generateActionCreator<Store, StoreWrapper>();
 
   const useDispatch = generateDispatch(useStoreContext);
 
