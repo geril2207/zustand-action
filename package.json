@@ -1,7 +1,11 @@
 {
-  "name": "zustand-action",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@geril2207/zustand-action",
+  "description": "Provide utility to create context with vanilla zustand store and separate actions outside of store",
+  "author": "Gergert Ilya",
+  "license": "MIT",
+  "repository": "https://github.com/geril2207/zustand-action",
+  "private": false,
+  "version": "0.0.1",
   "type": "module",
   "files": [
     "dist",
